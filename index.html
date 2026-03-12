@@ -2,11 +2,9 @@
 <html>
 
 <head>
-
 <title>For Muthi</title>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial;
@@ -17,7 +15,6 @@ overflow-x:hidden;
 }
 
 /* النجوم */
-
 .star{
 position:fixed;
 width:2px;
@@ -25,42 +22,35 @@ height:2px;
 background:white;
 animation: twinkle 2s infinite alternate;
 }
-
 @keyframes twinkle{
 from{opacity:0.2}
 to{opacity:1}
 }
 
 /* القطط */
-
 .cat{
 position:fixed;
 font-size:40px;
 animation: floatCat 20s linear infinite;
 opacity:0.8;
 }
-
 @keyframes floatCat{
 0%{transform:translateY(110vh) translateX(0)}
 100%{transform:translateY(-20vh) translateX(200px)}
 }
 
 /* الصفحات */
-
 .page{
 display:none;
 padding:80px 20px;
 min-height:100vh;
 }
-
 .active{
 display:block;
 }
 
 /* الازرار */
-
 button{
-
 padding:15px 40px;
 font-size:20px;
 border:none;
@@ -69,259 +59,205 @@ background:#6fb3ff;
 color:white;
 cursor:pointer;
 transition:0.3s;
-
 }
-
 button:hover{
-
 transform:scale(1.1);
 background:#9dd0ff;
-
 }
 
 /* اهتزاز */
-
 .shake{
 animation: shake 0.4s;
 }
-
 @keyframes shake{
-
 0%{transform:translateX(0)}
 25%{transform:translateX(-5px)}
 50%{transform:translateX(5px)}
 75%{transform:translateX(-5px)}
 100%{transform:translateX(0)}
-
 }
 
 /* الاسئلة */
-
 .question{
 margin:40px;
 font-size:22px;
 }
-
 label{
 display:block;
 margin:10px;
 }
 
 /* الرسالة */
-
 #message{
-
 max-width:800px;
 margin:auto;
 font-size:22px;
 line-height:1.8;
-
 }
-
 </style>
 
 </head>
 
 <body>
 
-<audio autoplay loop>
-<source src="music.mp3" type="audio/mpeg">
-</audio>
+<!-- ملف الأغنية -->
+<script>
+let bgMusic = new Audio("music.mp3"); // ضع الملف في نفس مجلد HTML
+bgMusic.loop = true;
+
+// تشغيل الموسيقى عند أول تفاعل مع زر Think ?
+function playMusicOnce() {
+    if(bgMusic.paused){
+        bgMusic.play();
+    }
+}
+</script>
 
 <script>
-
 /* نجوم */
-
 for(let i=0;i<120;i++){
-
 let star=document.createElement("div")
 star.className="star"
-
 star.style.left=Math.random()*100+"vw"
 star.style.top=Math.random()*100+"vh"
-
 star.style.animationDelay=Math.random()*2+"s"
-
 document.body.appendChild(star)
-
 }
 
 /* قطط */
-
 for(let i=0;i<12;i++){
-
 let cat=document.createElement("div")
 cat.className="cat"
 cat.innerHTML="🐱"
-
 cat.style.left=Math.random()*100+"vw"
 cat.style.animationDuration=15+Math.random()*20+"s"
-
 document.body.appendChild(cat)
-
 }
-
 </script>
 
 <!-- الصفحة الأولى -->
-
 <div id="page1" class="page active">
-
 <h1>Hello, we need to think little</h1>
-
 <br><br>
-
-<button onclick="showPage(2)">
+<button onclick="playMusicOnce(); showPage(2)">
 Think ?
 </button>
-
 </div>
 
 <!-- صفحة الاسئلة -->
-
 <div id="page2" class="page">
-
 <h2>Answer the questions</h2>
 
 <div class="question" id="q1box">
-
 <p>who is the prettiest girl in the world ?</p>
-
 <label><input type="radio" name="q1" value="a"> muthii</label>
 <label><input type="radio" name="q1" value="b"> bella</label>
 <label><input type="radio" name="q1" value="c"> dodo</label>
-
 </div>
 
 <div class="question" id="q2box">
-
 <p>we have 50 restaurant to done , how many we eat ?</p>
-
 <label><input type="radio" name="q2" value="a"> 100</label>
 <label><input type="radio" name="q2" value="b"> 200</label>
 <label><input type="radio" name="q2" value="c"> none of them</label>
-
 </div>
 
 <div class="question" id="q3box">
-
 <p>what is my favorite part of you ?</p>
-
 <label><input type="radio" name="q3" value="a"> you</label>
 <label><input type="radio" name="q3" value="b"> you</label>
 <label><input type="radio" name="q3" value="c"> you</label>
-
 </div>
 
 <br>
-
 <button onclick="result()">
 Result
 </button>
-
 </div>
 
 <!-- صفحة النتيجة -->
-
 <div id="page3" class="page">
-
 <h1 id="score"></h1>
-
 <br>
-
 <button id="finalBtn" onclick="showPage(4)" style="display:none">
 I'm.....
 </button>
-
+<button id="tryAgainBtn" style="display:none" onclick="tryAgain()">
+Try Again
+</button>
 </div>
 
 <!-- الصفحة الاخيرة -->
-
 <div id="page4" class="page">
-
 <div id="message"></div>
-
 </div>
 
 <script>
-
 function showPage(n){
-
 document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"))
 document.getElementById("page"+n).classList.add("active")
-
 }
 
 /* النتيجة */
-
 function result(){
+let score=0;
 
-let score=0
+let q1=document.querySelector('input[name="q1"]:checked');
+let q2=document.querySelector('input[name="q2"]:checked');
+let q3=document.querySelector('input[name="q3"]:checked');
 
-let q1=document.querySelector('input[name="q1"]:checked')
-let q2=document.querySelector('input[name="q2"]:checked')
-let q3=document.querySelector('input[name="q3"]:checked')
+let q1box=document.getElementById("q1box");
+let q2box=document.getElementById("q2box");
+let q3box=document.getElementById("q3box");
 
-let q1box=document.getElementById("q1box")
-let q2box=document.getElementById("q2box")
+// إزالة الاهتزاز السابق
+q1box.classList.remove("shake");
+q2box.classList.remove("shake");
+q3box.classList.remove("shake");
 
-q1box.classList.remove("shake")
-q2box.classList.remove("shake")
+// تحقق من الإجابات
+if(q1 && q1.value=="a"){ score++; } else { q1box.classList.add("shake"); }
+if(q2 && q2.value=="c"){ score++; } else { q2box.classList.add("shake"); }
+if(q3){ score++; } // دائمًا صحيحة
 
-if(q1 && q1.value=="a"){
-score++
-}else{
-q1box.classList.add("shake")
+// اعرض صفحة النتائج
+document.getElementById("score").innerText = "Your result: "+score+" / 3";
+showPage(3);
+
+// عرض الأزرار حسب النتيجة
+if(score == 3){
+document.getElementById("finalBtn").style.display = "inline-block";
+document.getElementById("tryAgainBtn").style.display = "none";
+} else {
+document.getElementById("finalBtn").style.display = "none";
+document.getElementById("tryAgainBtn").style.display = "inline-block";
+}
 }
 
-if(q2 && q2.value=="c"){
-score++
-}else{
-q2box.classList.add("shake")
+// إعادة المحاولة
+function tryAgain(){
+document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+document.querySelectorAll(".question").forEach(q => q.classList.remove("shake"));
+document.getElementById("tryAgainBtn").style.display = "none";
+showPage(2);
 }
 
-if(q3){
-score++
-}
+/* النص النهائي */
+let text=`Yes, you are very beautiful, Muthi. You are the most beautiful thing God has created. You are the flying angel who fills every place with beauty. Wherever you go, the world becomes softer and brighter. You are like paradise itself, and your beauty has no end and never fades—just like my love for you. No matter what happens and no matter what the world brings, you will always remain my little girl and my princess, the one I would give everything for without hesitation. You are my spoiled one, my precious girl, and the one who makes my heart feel at peace. Smile, because your face was made for smiles, and when you smile the whole world seems more beautiful. Be the happiest and most wonderful version of yourself, because a beauty like yours deserves joy, kindness, and endless love. And remember, even when the days are heavy or the nights feel quiet, you will always be someone special—someone whose presence lights up hearts and whose beauty is not only in her face, but in her soul as well. 🖤✨`;
 
-document.getElementById("score").innerText="Your result: "+score+" / 3"
-
-showPage(3)
-
-if(score==3){
-document.getElementById("finalBtn").style.display="inline-block"
-}
-
-}
-
-/* النص الكامل */
-
-let text=`Yes, you are very beautiful, Muthi. You are the most beautiful thing God has created. You are the flying angel who fills every place with beauty. Wherever you go, the world becomes softer and brighter. You are like paradise itself, and your beauty has no end and never fades—just like my love for you. No matter what happens and no matter what the world brings, you will always remain my little girl and my princess, the one I would give everything for without hesitation. You are my spoiled one, my precious girl, and the one who makes my heart feel at peace. Smile, because your face was made for smiles, and when you smile the whole world seems more beautiful. Be the happiest and most wonderful version of yourself, because a beauty like yours deserves joy, kindness, and endless love. And remember, even when the days are heavy or the nights feel quiet, you will always be someone special—someone whose presence lights up hearts and whose beauty is not only in her face, but in her soul as well. 🖤✨`
-
-let i=0
-
+let i=0;
 function typeText(){
-
 if(i<text.length){
-
 document.getElementById("message").innerHTML+=text.charAt(i)
-
 i++
-
 setTimeout(typeText,35)
-
 }
-
 }
 
 document.getElementById("finalBtn").addEventListener("click",()=>{
-
 setTimeout(typeText,500)
-
-})
-
+});
 </script>
 
 </body>
-
 </html>
