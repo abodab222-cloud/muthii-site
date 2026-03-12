@@ -100,21 +100,8 @@ line-height:1.8;
 
 <body>
 
-<!-- ملف الأغنية -->
+<!-- النجوم والقطط -->
 <script>
-let bgMusic = new Audio("music.mp3"); // ضع الملف في نفس مجلد HTML
-bgMusic.loop = true;
-
-// تشغيل الموسيقى عند أول تفاعل مع زر Think ?
-function playMusicOnce() {
-    if(bgMusic.paused){
-        bgMusic.play();
-    }
-}
-</script>
-
-<script>
-/* نجوم */
 for(let i=0;i<120;i++){
 let star=document.createElement("div")
 star.className="star"
@@ -123,8 +110,6 @@ star.style.top=Math.random()*100+"vh"
 star.style.animationDelay=Math.random()*2+"s"
 document.body.appendChild(star)
 }
-
-/* قطط */
 for(let i=0;i<12;i++){
 let cat=document.createElement("div")
 cat.className="cat"
@@ -132,6 +117,20 @@ cat.innerHTML="🐱"
 cat.style.left=Math.random()*100+"vw"
 cat.style.animationDuration=15+Math.random()*20+"s"
 document.body.appendChild(cat)
+}
+</script>
+
+<!-- الموسيقى -->
+<script>
+let bgMusic = new Audio("music.mp3"); // ملفك music.mp3
+bgMusic.loop = true;
+
+function playMusicOnce() {
+    if(bgMusic.paused){
+        bgMusic.play().catch(e=>{
+            console.log("Press any button to start music");
+        });
+    }
 }
 </script>
 
@@ -175,7 +174,7 @@ Result
 </button>
 </div>
 
-<!-- صفحة النتيجة -->
+<!-- صفحة النتائج -->
 <div id="page3" class="page">
 <h1 id="score"></h1>
 <br>
@@ -210,36 +209,33 @@ let q1box=document.getElementById("q1box");
 let q2box=document.getElementById("q2box");
 let q3box=document.getElementById("q3box");
 
-// إزالة الاهتزاز السابق
 q1box.classList.remove("shake");
 q2box.classList.remove("shake");
 q3box.classList.remove("shake");
 
-// تحقق من الإجابات
 if(q1 && q1.value=="a"){ score++; } else { q1box.classList.add("shake"); }
 if(q2 && q2.value=="c"){ score++; } else { q2box.classList.add("shake"); }
-if(q3){ score++; } // دائمًا صحيحة
+if(q3){ score++; }
 
-// اعرض صفحة النتائج
-document.getElementById("score").innerText = "Your result: "+score+" / 3";
+document.getElementById("score").innerText="Your result: "+score+" / 3";
 showPage(3);
 
-// عرض الأزرار حسب النتيجة
-if(score == 3){
-document.getElementById("finalBtn").style.display = "inline-block";
-document.getElementById("tryAgainBtn").style.display = "none";
+if(score==3){
+document.getElementById("finalBtn").style.display="inline-block";
+document.getElementById("tryAgainBtn").style.display="none";
 } else {
-document.getElementById("finalBtn").style.display = "none";
-document.getElementById("tryAgainBtn").style.display = "inline-block";
+document.getElementById("finalBtn").style.display="none";
+document.getElementById("tryAgainBtn").style.display="inline-block";
 }
 }
 
-// إعادة المحاولة
+/* إعادة المحاولة */
 function tryAgain(){
-document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+playMusicOnce();
+document.querySelectorAll('input[type="radio"]').forEach(r => r.checked=false);
 document.querySelectorAll(".question").forEach(q => q.classList.remove("shake"));
-document.getElementById("tryAgainBtn").style.display = "none";
 showPage(2);
+document.getElementById("tryAgainBtn").style.display="none";
 }
 
 /* النص النهائي */
